@@ -3,8 +3,8 @@ package ghttp
 import (
 	"context"
 	"github.com/go-gourd/gourd/config"
+	"github.com/go-gourd/gourd/event"
 	"github.com/go-gourd/gourd/logger"
-	"go.uber.org/zap"
 	"net/http"
 	"strconv"
 )
@@ -23,7 +23,7 @@ func RunHttpServer() {
 
 	listen := httpConf.Host + ":" + strconv.Itoa(int(httpConf.Port))
 
-	logger.Info("Started http server. "+listen, zap.Skip())
+	logger.Info("Started http server. " + listen)
 
 	httpServer = &http.Server{
 		Addr:    listen,
@@ -35,6 +35,11 @@ func RunHttpServer() {
 		logger.Error(err.Error())
 		panic(err)
 	}
+
+	//监听进程结束时关闭服务
+	event.Listen("_stop", func(params any) {
+		HttpServerShutdown(params.(context.Context))
+	})
 }
 
 // GetHttpServer 获取http.Server实例

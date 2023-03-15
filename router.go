@@ -3,6 +3,7 @@ package ghttp
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-gourd/gourd/config"
+	"github.com/go-gourd/gourd/event"
 )
 
 type routerHandler func(*gin.Engine)
@@ -23,6 +24,13 @@ func GetEngine() *gin.Engine {
 	}
 
 	ginEngine = gin.New()
+
+	//添加启动http服务事件监听
+	if config.GetHttpConfig().Enable {
+		event.Listen("_http_start", func(params any) {
+			go RunHttpServer()
+		})
+	}
 
 	return ginEngine
 }
