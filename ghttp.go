@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/go-gourd/gourd/config"
 	"github.com/go-gourd/gourd/event"
-	"github.com/go-gourd/gourd/logger"
+	"github.com/go-gourd/gourd/log"
 	"net/http"
 	"strconv"
 )
@@ -23,7 +23,7 @@ func RunHttpServer() {
 
 	listen := httpConf.Host + ":" + strconv.Itoa(int(httpConf.Port))
 
-	logger.Info("Started http server. " + listen)
+	log.Info("Started http server. " + listen)
 
 	httpServer = &http.Server{
 		Addr:    listen,
@@ -32,7 +32,7 @@ func RunHttpServer() {
 
 	// 服务连接
 	if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		logger.Error(err.Error())
+		log.Error(err.Error())
 		panic(err)
 	}
 
@@ -50,7 +50,7 @@ func GetHttpServer() *http.Server {
 func HttpServerShutdown(ctx context.Context) {
 	if httpServer != nil {
 		if e := httpServer.Shutdown(ctx); e != nil {
-			logger.Error("HttpServer Shutdown:" + e.Error())
+			log.Error("HttpServer Shutdown:" + e.Error())
 		}
 	}
 }
