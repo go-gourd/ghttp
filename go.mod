@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/gin-gonic/gin v1.9.1
-	github.com/go-gourd/gourd v0.2.15
+	github.com/go-gourd/gourd v0.3.1
 )
 
 require (

@@ -2,6 +2,7 @@ package ghttp
 
 import (
 	"context"
+	"errors"
 	"github.com/go-gourd/gourd/config"
 	"github.com/go-gourd/gourd/event"
 	"github.com/go-gourd/gourd/log"
@@ -31,7 +32,7 @@ func RunHttpServer() {
 	}
 
 	// 服务连接
-	if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+	if err := httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Error(err.Error())
 		panic(err)
 	}
